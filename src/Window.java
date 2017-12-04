@@ -8,13 +8,13 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Window implements ActionListener {
-    public JFrame frame = new JFrame();
-    public int CellSize = 16;
-    public int LONGITUDE = CellSize * 25;
-    public int HIGH = CellSize * 18;
+    private JFrame frame = new JFrame();
+    private int CellSize = 16;
+    private int LONGITUDE = CellSize * 25;
+    private int HIGH = CellSize * 18;
     private File bestFile = new File("Best.txt");
-    public Cell[][] list = new Cell[25][18];
-    public Cell[][] empty = new Cell[25][18];
+    private Cell[][] list = new Cell[25][18];
+    private Cell[][] empty = new Cell[25][18];
     Player player ;
     private boolean inGame = true;
     private boolean pause = false;
@@ -145,15 +145,19 @@ public class Window implements ActionListener {
            intelij.Stop();
            mob1.Stop();
            mob2.Stop();
+           timer.stop();
+           frame.setVisible(false);
+           Menu.UnderMenu.setVisible(true);
+             new MyEvent(frame).getWindow().remove(0);
         }
 
         if (!inVisability) {
-            intelij.setAimForII(player.x, player.y);  // задает цель для моба
-            mob1.setAimForII(player.x, player.y);
-            mob2.setAimForII(player.x, player.y);
+            if(player.x == intelij.x || player.y == intelij.y)intelij.setAimForII(player.x, player.y);  // задает цель для моба
+            if(player.x == mob1.x || player.y == mob1.y)mob1.setAimForII(player.x, player.y);
+            if(player.x == mob2.x || player.y == mob2.y)mob2.setAimForII(player.x, player.y);  //проеверяет есть ли необходимость задать цель (видит ли на данный момент моб игрока)
         }
 
-        if(inVisability) {
+        if(inVisability) {             // счетчик на 10 сек для невидимости
             inVisabilityCount++;
             if (inVisabilityCount > 200) {
                 inVisability = false;
@@ -308,4 +312,5 @@ public class Window implements ActionListener {
             x.notifyAll();
         }
     }
+
 }

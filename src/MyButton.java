@@ -26,14 +26,14 @@ public class MyButton extends JPanel{
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                image = but2.getImage();
+                image = but1.getImage();
                 repaint();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                image = but1.getImage();
+                image = but2.getImage();
                 repaint();
             }
         });

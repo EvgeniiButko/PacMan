@@ -62,14 +62,12 @@ public class Intelij extends Rectangle implements ActionListener{
     }
 
     public void setAimForII(int a,int b){
-            if(!isGOToAim) {
-                XX = a;
-                XY = b;
-            }
+        XX = a;
+        XY = b;
     }
 
     private synchronized int GoToAim(){
-        if (XX == x) {
+        if (XX == x && XX != 0) {
                     if (XY > y) {
                         for (int i = y/width; i < XY/width; i++)
                             if (cells[x/width][i] == null) return 0;
@@ -81,7 +79,7 @@ public class Intelij extends Rectangle implements ActionListener{
                         return 3;
                     }
                 }
-                if (XY == y) {
+        if (XY == y && XY != 0) {
                     if (XX > x) {
                         for (int i = x/width; i < XX/width; i++)
                             if (cells[i][y/width] == null) return 0;
@@ -104,16 +102,21 @@ public class Intelij extends Rectangle implements ActionListener{
         }else{
             count = 0;
 
-            if(GoToAim() != 0 && !isGOToAim){
+            if(!isGOToAim && GoToAim() != 0){  //ЕСЛИ сейчас моб не бежит
                 way = GoToAim();
                 isGOToAim = true;
             }else way = getWay(way);
         }
 
         if(isGOToAim){
-            if(x != XX && y != XY) {
+            if(x/16 != XX/16 && y/16 != XY/16) {
                 Move(way);
-            }else isGOToAim = false;
+            }else {
+                isGOToAim = false;
+                XX = 0;
+                XY = 0;
+            }
+
         }
     }
 }
