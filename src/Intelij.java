@@ -14,8 +14,10 @@ public class Intelij extends Rectangle implements ActionListener{
     private volatile int XY;
     private int count;
     private boolean isGOToAim = false;
+    public Image image;
 
-    public Intelij(int xa, int ya, int size, Cell[][] c){
+    public Intelij(int xa, int ya, int size, Cell[][] c,String name){
+        image = new ImageIcon(name).getImage();
         x = xa;
         y = ya;
         width = size;

@@ -12,17 +12,25 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private boolean released = false;
-    private Clip clip = null;
+    private Clip[] clip = new Clip[2];
     private FloatControl volumeC = null;
     private boolean playing = false;
 
-    public Sound(File f) {
+    public Sound(String name1,String name2) {
         try {
+            File f = new File(name1);
+            File f2 = new File(name2);
+
             AudioInputStream stream = AudioSystem.getAudioInputStream(f);
-            clip = AudioSystem.getClip();
-            clip.open(stream);
-            clip.addLineListener(new Listener());
-            volumeC = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            clip[0] = AudioSystem.getClip();
+            clip[0].open(stream);
+            clip[0].addLineListener(new Listener());
+            volumeC = (FloatControl) clip[0].getControl(FloatControl.Type.MASTER_GAIN);
+            stream = AudioSystem.getAudioInputStream(f2);
+            clip[1] = AudioSystem.getClip();
+            clip[1].open(stream);
+            clip[1].addLineListener(new Listener());
+            volumeC = (FloatControl) clip[1].getControl(FloatControl.Type.MASTER_GAIN);
             released = true;
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
             exc.printStackTrace();
@@ -46,30 +54,30 @@ public class Sound {
 	  Если reakOld==true, о звук будет прерван и запущен заново
 	  Иначе ничего не произойдёт
 	*/
-    public void play(boolean breakOld) {
+    public void play(boolean breakOld, int i) {
         if (released) {
             if (breakOld) {
-                clip.stop();
-                clip.setFramePosition(0);
-                clip.start();
+                clip[i].stop();
+                clip[i].setFramePosition(0);
+                clip[i].start();
                 playing = true;
             } else if (!isPlaying()) {
-                clip.setFramePosition(0);
-                clip.start();
+                clip[i].setFramePosition(0);
+                clip[i].start();
                 playing = true;
             }
         }
     }
 
     //То же самое, что и play(true)
-    public void play() {
-        play(true);
+    public void play(int i) {
+        play(true,i);
     }
 
     //Останавливает воспроизведение
-    public void stop() {
+    public void stop(int i) {
         if (playing) {
-            clip.stop();
+            clip[i].stop();
         }
     }
 
@@ -101,14 +109,6 @@ public class Sound {
                 while (playing) clip.wait();
             } catch (InterruptedException exc) {}
         }
-    }
-
-    //Статический метод, для удобства
-    public static Sound playSound(String s) {
-        File f = new File(s);
-        Sound snd = new Sound(f);
-        snd.play();
-        return snd;
     }
 
     private class Listener implements LineListener {

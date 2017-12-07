@@ -21,6 +21,7 @@ public class MapMaker implements MouseListener,ActionListener {
 
     public MapMaker(){
         Load();
+        LoadDefaultBlocks();
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -71,7 +72,8 @@ public class MapMaker implements MouseListener,ActionListener {
         }
     }
 
-    private void LoadInFile(){           //метод для сохранения в файл
+    private void LoadInFile(){
+        //метод для сохранения в файл
         try{
             printWriter = new PrintWriter(fileName);
             for (int i = 0; i < forFile.size(); i++) {
@@ -82,6 +84,21 @@ public class MapMaker implements MouseListener,ActionListener {
             }
             printWriter.close();
         }catch (FileNotFoundException e){}
+    }
+
+    public void LoadDefaultBlocks(){
+        for (int i = 0; i < LONGITUDE/CellSize; i++) {
+            list[i][0].incImage();
+            list[i][HIGH/CellSize-1].incImage();
+            forFile.add(list[i][HIGH/CellSize-1]);
+            forFile.add(list[i][0]);
+        }
+        for (int i = 0; i < HIGH/CellSize; i++) {
+            list[0][i].incImage();
+            list[LONGITUDE/CellSize-1][i].incImage();
+            forFile.add(list[LONGITUDE/CellSize-1][i]);
+            forFile.add(list[0][i]);
+        }
     }
 
     private class Cell_ForMapMaking{          // класс для клетки
@@ -96,6 +113,7 @@ public class MapMaker implements MouseListener,ActionListener {
             img = !img;
             count++;
         }
+
 
         public int getCount(){
             return count;
@@ -127,8 +145,10 @@ public class MapMaker implements MouseListener,ActionListener {
         a = a/CellSize;
         b = b/CellSize;
         b -= 2;
-          list[a][b].incImage();
-          forFile.add(list[a][b]);
+         try {
+             list[a][b].incImage();
+             forFile.add(list[a][b]);
+         }catch (ArrayIndexOutOfBoundsException e){}
     }
     @Override
     public void mouseClicked(MouseEvent e) {

@@ -1,9 +1,12 @@
+import javax.swing.*;
 import java.awt.*;
 
 public class Player extends Rectangle{
     private int speed = 2;
+    public Image image;
 
-    public Player(int x,int y, int size){
+    public Player(int x,int y, int size,String name){
+        image = new ImageIcon(name).getImage();
         this.x = x;
         this.y = y;
         width = size;

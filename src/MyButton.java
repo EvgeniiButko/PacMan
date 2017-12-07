@@ -4,23 +4,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MyButton extends JPanel{
-    private int x;
-    private int y;
     private Image image;
     private ImageIcon but1;
     private ImageIcon but2;
     private int width;
     private int height;
 
-    public MyButton(int x,int y,int width,int height,String name1,String name2){
-        this.x = x;
-        this.y = y;
+    public MyButton(int width,int height,String name1,String name2){
         this.width = width;
         this.height = height;
         but1 = new ImageIcon(name1);
         but2 = new ImageIcon(name2);
         setSize(width,height);
-        setLocation(x,y);
         image = but2.getImage();
         addMouseListener(new MouseAdapter() {
             @Override
