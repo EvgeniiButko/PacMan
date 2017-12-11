@@ -4,7 +4,7 @@ import java.awt.*;
 public class MenuPanel2 extends JPanel {
     public MyButton button = new MyButton(180,45,"TRY1.png","TRY2.png");
     public MyButton button1 = new MyButton(180,45,"MAINMENU.png","MAINMENU.png");
-    private Image img = new ImageIcon("formenu.jpg").getImage();
+    private Image img = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("formenu.jpg"))).getImage();
 
     public MenuPanel2(){
         setSize(400,400);

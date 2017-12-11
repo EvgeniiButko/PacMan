@@ -1,7 +1,7 @@
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Start{
-    private static Game window;
+    private static GamePanel window;
 
     public static void main(String[] args) {
         Menu m = new Menu(window);

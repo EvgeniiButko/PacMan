@@ -3,10 +3,8 @@ import java.awt.*;
 
 public class Player extends Rectangle{
     private int speed = 2;
-    public Image image;
 
-    public Player(int x,int y, int size,String name){
-        image = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource(name))).getImage();
+    public Player(int x,int y, int size){
         this.x = x;
         this.y = y;
         width = size;

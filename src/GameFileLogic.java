@@ -52,7 +52,7 @@ public class GameFileLogic {
             try {
                 int aX = scanner.nextInt();
                 int aY = scanner.nextInt();
-                list[aX / Game.CellSize][aY / Game.CellSize] = new Cell(aX, aY, Game.CellSize);
+                list[aX / GamePanel.CellSize][aY / GamePanel.CellSize] = new Cell(aX, aY, GamePanel.CellSize);
             } catch (NoSuchElementException e) {
                 break;
             }catch (NullPointerException e){}
@@ -60,7 +60,7 @@ public class GameFileLogic {
         for (int i = 0; i < 25; i++) {
             for (int j = 0; j < 18; j++) {
                 if(list[i][j] == null){
-                    empty[i][j] = new Cell(i* Game.CellSize,j* Game.CellSize, Game.CellSize);
+                    empty[i][j] = new Cell(i* GamePanel.CellSize,j* GamePanel.CellSize, GamePanel.CellSize);
                     couunt++;
                 }
             }

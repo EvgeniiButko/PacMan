@@ -15,8 +15,8 @@ public class Intelij extends Player implements ActionListener{
     private int count;
     private boolean isGOToAim = false;
 
-    public Intelij(int xa, int ya, int size, Cell[][] c,String name){
-        super(xa,ya,size,name);
+    public Intelij(int xa, int ya, int size, Cell[][] c){
+        super(xa,ya,size);
         cells = c;
         if(cells[x/width + 1][y / width] != null)way = 1;
         if(cells[x/width - 1][y / width] != null)way = 2;

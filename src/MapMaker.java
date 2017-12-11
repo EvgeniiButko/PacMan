@@ -104,8 +104,8 @@ public class MapMaker implements MouseListener,ActionListener {
         private int x;
         private int y;
         private int count = 0;
-        private ImageIcon imageIcon = new ImageIcon("forMapMaker.png");
-        private  ImageIcon imageIcon2 = new ImageIcon("Yellow.png");
+        private ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("forMapMaker.png")));
+        private  ImageIcon imageIcon2 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("Yellow.png")));
         private boolean img = true;
 
         public void incImage(){
