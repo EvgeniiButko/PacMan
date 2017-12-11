@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public class Menu extends JFrame{
     private Game w = null;
@@ -8,14 +11,34 @@ public class Menu extends JFrame{
     private MenuPanel menu = new MenuPanel();
     private MenuPanel2 menu2 = new MenuPanel2();
     private MenuPanel3 menu3 = new MenuPanel3();
-    public int count;
+    private int count;
+    private int MaxCount = 1;
     private boolean flag;
     private String fileName1 = "Map1.txt";
     private String fileName2 = "lvl1.txt";
     private String fileName3 = "lvl2.txt";
+    private HashMap<Integer,String> lvls = new HashMap<>();
+    private int Result = 0;
+    private int life = 3;
+
+    public int getLife(){
+        return life;
+    }
+    public void setLife(int life){
+        this.life = life;
+    }
+
+    public int getResult(){
+        return Result;
+    }
+    public void setResult(int result){
+        Result = result;
+    }
 
     Menu(Game a) {
         w = a;
+        AddNewMap(fileName2);
+        AddNewMap(fileName3);
         //--------------------------------------MainMenu---------------------------------------//
         menu.button.addMouseListener(new MouseAdapter() {
             @Override
@@ -82,11 +105,12 @@ public class Menu extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(count == 1)w = new Game(fileName2,thisMenu);
-                if(count == 2)w = new Game(fileName3,thisMenu);
-                if(count == 3){
+
+                if(count == MaxCount){
                     w = new Game(fileName1,thisMenu);
                     count = 0;
+                }else{
+                    w = new Game(lvls.get(count),thisMenu);
                 }
                 remove(menu3);
                 add(w);
@@ -141,4 +165,10 @@ public class Menu extends JFrame{
         setSize(400,400);
     }
 
+    public void AddNewMap(String fileName){
+        if(new File(fileName).exists()) {
+            lvls.put(MaxCount, fileName);
+            MaxCount++;
+        }
+    }
 }

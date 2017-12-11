@@ -13,8 +13,8 @@ public class MyButton extends JPanel{
     public MyButton(int width,int height,String name1,String name2){
         this.width = width;
         this.height = height;
-        but1 = new ImageIcon(name1);
-        but2 = new ImageIcon(name2);
+        but1 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource(name1)));
+        but2 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource(name2)));
         setSize(width,height);
         image = but2.getImage();
         addMouseListener(new MouseAdapter() {

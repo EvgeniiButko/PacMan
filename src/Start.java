@@ -9,11 +9,6 @@ public class Start{
         m.setVisible(true);
         m.setSize(25*16+16, 18*16+16*5);
         m.setResizable(true);
-        while (true){
-            m.repaint();
-            try {
-                Thread.sleep(2000);
-            }catch (InterruptedException e){}
         }
     }
-}
+

@@ -6,7 +6,7 @@ public class Player extends Rectangle{
     public Image image;
 
     public Player(int x,int y, int size,String name){
-        image = new ImageIcon(name).getImage();
+        image = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource(name))).getImage();
         this.x = x;
         this.y = y;
         width = size;

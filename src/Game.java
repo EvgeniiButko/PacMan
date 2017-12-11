@@ -1,18 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class Game extends JPanel implements ActionListener {
     public static int CellSize = 16;
     private int LONGITUDE = CellSize * 25;
     private int HIGH = CellSize * 18;
-    private File bestFile = new File("Best.txt");
-    private FieldArrays arrays = new FieldArrays();
+    private GameFileLogic arrays = new GameFileLogic();  //m
     private Cell[][] list = arrays.getList();
     private Cell[][] empty = arrays.getEmpty();
     Player player ;
@@ -23,17 +17,18 @@ public class Game extends JPanel implements ActionListener {
     private Intelij intelij;
     private Intelij mob1;
     private Intelij mob2;
-    private int BestResult = 0;
-    private Image bomb = new ImageIcon("bomb.png").getImage();
-    private Image stone = new ImageIcon("Камень.png").getImage();
-    private Image simpleBlock = new ImageIcon("field.png").getImage();
-    Timer timer;
-    private Sound sound = new Sound("Beep4.wav","Broken_Robot4.wav");
-    private Menu linkOnMenu = null;
+    private Image bomb = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("bomb.png"))).getImage();
+    private Image stone = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("Камень.png"))).getImage();
+    private Image simpleBlock = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("field.png"))).getImage();
+    Timer timer;    //m
+    private Sound sound = new Sound("Beep4.wav","Broken_Robot4.wav");  //m
+    private Menu linkOnMenu = null;   //m
     private int count;
-    private PaintPanel paintPanel = new PaintPanel();
+    private PaintPanel paintPanel = new PaintPanel(); //m
     private String Name;
     private int MaxValue;
+    private boolean isVisible;
+    private int countForVisible;
 
     Thread MyLogic = new Thread(new Runnable() {
         @Override
@@ -72,15 +67,10 @@ public class Game extends JPanel implements ActionListener {
         setFocusable(true);
         Name = name;
 
-        try {
-            Scanner scanner = new Scanner(bestFile);
-            BestResult = scanner.nextInt();
-        } catch (FileNotFoundException e) {
-        } catch (NoSuchElementException e){}
-
         timer = new Timer(20,this);
 
         MaxValue = arrays.LoadField(name);
+        System.out.println(MaxValue*10);
 
         player = new Player(23*CellSize,16*CellSize,CellSize,"player.png");
         intelij = new Intelij(16,16,CellSize,empty,"mob.png");
@@ -126,33 +116,51 @@ public class Game extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(player.intersects(intelij) | player.intersects(mob1) | player.intersects(mob2)){
-            SaveResult();
-            inGame = false;
-            intelij.Stop();
-            mob1.Stop();
-            mob2.Stop();
-            timer.stop();
-            sound.play(1);
-            try{
-                Thread.sleep(2500);
-            }catch(InterruptedException ex){}
-            linkOnMenu.ChangeForSecondMenu();
+        if(isVisible){
+            countForVisible++;
+            if(countForVisible > 200){
+                countForVisible = 0;
+                isVisible = false;
+            }
+        }
+        if(!isVisible && (player.intersects(intelij) | player.intersects(mob1) | player.intersects(mob2))){
+                if(linkOnMenu.getLife() <= 0) {
+                    arrays.SaveResult(count + linkOnMenu.getResult());
+                    inGame = false;
+                    intelij.Stop();
+                    mob1.Stop();
+                    mob2.Stop();
+                    timer.stop();
+                    sound.play(1);
+                    try {
+                        Thread.sleep(2500);
+                    } catch (InterruptedException ex) {
+                    }
+                    linkOnMenu.ChangeForSecondMenu();
+                }else{
+                    try{
+                        Thread.sleep(1000);
+                    }catch (InterruptedException ex){}
+                    linkOnMenu.setLife(linkOnMenu.getLife()-1);
+                    isVisible = true;
+                }
         }
         if(count == MaxValue*10){
-            SaveResult();
+            linkOnMenu.setResult(linkOnMenu.getResult()+count);
             inGame = false;
             intelij.Stop();
             mob1.Stop();
             mob2.Stop();
             timer.stop();
-            linkOnMenu.ChangeForTherdMenu();
-              if(Name.equals("MAP2.png"))linkOnMenu.ChangeForSecondMenu();
+              if(Name.equals("MAP2.png")){
+                  linkOnMenu.ChangeForSecondMenu();
+              }else{linkOnMenu.ChangeForTherdMenu();}
         }
-            if(player.x == intelij.x || player.y == intelij.y)intelij.setAimForII(player.x, player.y); // задает цель для моба
-            if(player.x == mob1.x || player.y == mob1.y)mob1.setAimForII(player.x, player.y);
-            if(player.x == mob2.x || player.y == mob2.y)mob2.setAimForII(player.x, player.y); //проеверяет есть ли необходимость задать цель (видит ли на данный момент моб игрока)
-
+            if(!isVisible){
+                if (player.x == intelij.x || player.y == intelij.y) intelij.setAimForII(player.x, player.y); // задает цель для моба
+                if (player.x == mob1.x || player.y == mob1.y) mob1.setAimForII(player.x, player.y);
+                if (player.x == mob2.x || player.y == mob2.y) mob2.setAimForII(player.x, player.y); //проеверяет есть ли необходимость задать цель (видит ли на данный момент моб игрока)
+            }
         repaint();
     }
 
@@ -187,8 +195,10 @@ public class Game extends JPanel implements ActionListener {
             }
 
             g.setColor(Color.BLACK);
-            g.drawString(count + " = count", 40,19*CellSize);
-            g.drawString(BestResult + " = best", 20*CellSize,19*CellSize);
+            g.drawString((linkOnMenu.getResult()+count) + " = count", 40,19*CellSize);
+            g.drawString(arrays.getBestResult() + " = best", 20*CellSize,19*CellSize);
+            g.drawString(linkOnMenu.getLife() + " lifes",10*CellSize,19*CellSize);
+            if(isVisible)g.drawString((200-countForVisible)/10+" invisability",10*CellSize,20*CellSize);
          }
     }
     protected void paintComponent(Graphics g) {
@@ -196,17 +206,6 @@ public class Game extends JPanel implements ActionListener {
         paintPanel.setBounds(0,0,400,400);
     }
 
-    public void SaveResult() {
-        if (linkOnMenu.count > BestResult) {
-            try {
-                PrintWriter printWriter = new PrintWriter("Best.txt");
-                printWriter.print(linkOnMenu.count);
-                printWriter.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void Stop(){
         inGame = false;

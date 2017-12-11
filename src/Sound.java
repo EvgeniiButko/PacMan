@@ -56,16 +56,18 @@ public class Sound {
 	*/
     public void play(boolean breakOld, int i) {
         if (released) {
-            if (breakOld) {
-                clip[i].stop();
-                clip[i].setFramePosition(0);
-                clip[i].start();
-                playing = true;
-            } else if (!isPlaying()) {
-                clip[i].setFramePosition(0);
-                clip[i].start();
-                playing = true;
-            }
+            try {
+                if (breakOld) {
+                    clip[i].stop();
+                    clip[i].setFramePosition(0);
+                    clip[i].start();
+                    playing = true;
+                } else if (!isPlaying()) {
+                    clip[i].setFramePosition(0);
+                    clip[i].start();
+                    playing = true;
+                }
+            }catch (ArrayIndexOutOfBoundsException e){}
         }
     }
 

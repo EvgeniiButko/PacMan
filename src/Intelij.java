@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class Intelij extends Rectangle implements ActionListener{
+public class Intelij extends Player implements ActionListener{
     private Cell[][] cells;
     private int way = 0;
     private int speed = 2;
@@ -14,14 +14,9 @@ public class Intelij extends Rectangle implements ActionListener{
     private volatile int XY;
     private int count;
     private boolean isGOToAim = false;
-    public Image image;
 
     public Intelij(int xa, int ya, int size, Cell[][] c,String name){
-        image = new ImageIcon(name).getImage();
-        x = xa;
-        y = ya;
-        width = size;
-        height = size;
+        super(xa,ya,size,name);
         cells = c;
         if(cells[x/width + 1][y / width] != null)way = 1;
         if(cells[x/width - 1][y / width] != null)way = 2;
@@ -53,12 +48,6 @@ public class Intelij extends Rectangle implements ActionListener{
         timer.stop();
     }
 
-    private void Move(int i){
-        if(i == 1)x+=speed;
-        if(i == 2)x-=speed;
-        if(i == 3)y-=speed;
-        if(i == 4)y+=speed;
-    }
     public void start(){
         timer.start();
     }
@@ -100,7 +89,7 @@ public class Intelij extends Rectangle implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(count < 8 && !isGOToAim){
             count++;
-            Move(way);
+            move(way);
         }else{
             count = 0;
 
@@ -112,7 +101,7 @@ public class Intelij extends Rectangle implements ActionListener{
 
         if(isGOToAim){
             if(x/16 != XX/16 && y/16 != XY/16) {
-                Move(way);
+                move(way);
             }else {
                 isGOToAim = false;
                 XX = 0;

@@ -15,7 +15,6 @@ public class MapMaker implements MouseListener,ActionListener {
     private int MouseX;
     private int MouseY;
     private Button button = new Button("SAVE");
-    private Button button2 = new Button("BACK");
     private PrintWriter printWriter;
     private String fileName = "MAP2.txt";
 
@@ -158,7 +157,6 @@ public class MapMaker implements MouseListener,ActionListener {
     public void mousePressed(MouseEvent e) {
         MouseX = e.getX();
         MouseY = e.getY();
-        System.out.println(MouseX + " " + MouseY);
         Action(MouseX,MouseY);
     }
 

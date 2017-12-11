@@ -6,7 +6,7 @@ public class MenuPanel extends JPanel {
     public MyButton button1 = new MyButton(180,45,"CREATE1.png","CREATE2.png");
     public MyButton button2 = new MyButton(180,45,"PLAYMY.png","PLAYMY.png");
     public MyButton button3 = new MyButton(180,45,"EXIT1.png","EXIT2.png");
-    private Image img = new ImageIcon("formenu.jpg").getImage();
+    private Image img = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("formenu.jpg"))).getImage();
 
     public MenuPanel(){
        setSize(400,400);
